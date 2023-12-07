@@ -1,0 +1,140 @@
+create table Shop1(shop_id number(10) primary key,phone_num number(15),a_id number(10));
+
+create table Shop2(a_id number(10) primary key,address varchar2(20),city varchar2(10),zip_code number(10));
+
+create table Manager1(mgr_name varchar2(10),mgr_id number(10) primary key,mgr_phone_num number(15),shop_id number(10),m_id number(10));
+
+create table Manager2(m_id number(10) primary key,mgr_address varchar2(20),mgr_city varchar2(10),mgr_zip_code number(10));
+
+create table Bill1(bill_num number(10) primary key,tip_amount number(10),b_date date,e_id number(10),b_id number(10));
+
+create table Bill2(item_price number(10),item_name varchar2(20),total number(10),b_id number(10) primary key);
+
+create table Customer1(c_id number(10) primary key,c_name varchar2(20),phone_num number(15),k_id number(10));
+
+create table Customer2(k_id number(10) primary key,address varchar2(20),city varchar2(10),zip_code number(10));
+
+create table Bill3(bill_num number(10) primary key,tip_amount number(10),b_date date,c_id number(10),b_id number(10));
+
+create table Order1(order_num number(10) primary key,item_name varchar2(20),b_date date,quantity number(38),c_id number(10));
+
+create table Cashier1(e_id number(10) primary key,e_name varchar2(10),phone_num number(15),shop_id number(10),c_id number(10));
+
+create table Cashier2(c_id number(10) primary key,e_adress varchar2(20),e_city varchar2(10),e_zip_code number(10));
+
+
+
+
+
+
+
+
+
+
+ALTER TABLE Shop1 ADD CONSTRAINT FK_0S1_ID FOREIGN KEY (a_id) REFERENCES Shop2 (a_id);
+ALTER TABLE Manager1 ADD CONSTRAINT FK_0M1_ID FOREIGN KEY (shop_id ) REFERENCES Shop1(shop_id );
+ALTER TABLE Manager1 ADD CONSTRAINT FK_0M2_ID FOREIGN KEY (m_id) REFERENCES Manager2(m_id );
+ALTER TABLE Cashier1 ADD CONSTRAINT FK_0C1_ID FOREIGN KEY (c_id) REFERENCES Cashier2(c_id );
+ALTER TABLE Cashier1 ADD CONSTRAINT FK_0C2_ID FOREIGN KEY (shop_id) REFERENCES Shop1(shop_id);
+ALTER TABLE Bill1 ADD CONSTRAINT FK_0B1_ID FOREIGN KEY (b_id) REFERENCES Bill2(b_id);
+ALTER TABLE Bill1 ADD CONSTRAINT FK_0B2_ID FOREIGN KEY (e_id) REFERENCES Cashier1(e_id);
+ALTER TABLE Customer1 ADD CONSTRAINT FK_0CU1_ID FOREIGN KEY (k_id) REFERENCES Customer2(k_id);
+ALTER TABLE Bill3 ADD CONSTRAINT FK_0B3_ID FOREIGN KEY (c_id) REFERENCES Customer1(c_id);
+ALTER TABLE Bill3 ADD CONSTRAINT FK_0B4_ID FOREIGN KEY (b_id) REFERENCES Bill2(b_id);
+ALTER TABLE Order1 ADD CONSTRAINT FK_0o1_ID FOREIGN KEY (c_id) REFERENCES Customer1(c_id);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Insert into Shop1 values(011,01754856886,001);
+Insert into Shop1 values(012,01754769579,002);
+Insert into Shop1 values(013,01754856886,003);
+Insert into Shop1 values(014,01679247249,004);
+Insert into Shop1 values(015,01579857998,005);
+
+Insert into Shop2 values(001,'Uttara_Dhaka','Dhaka',75684);
+Insert into Shop2 values(002,'Uttara_Dhaka','Dhaka',756587);
+Insert into Shop2 values(003,'Mohakhali_Dhaka','Dhaka',756497);
+Insert into Shop2 values(004,'Gulshan_Dhaka','Dhaka',746974);
+Insert into Shop2 values(005,'Chittagong','Chittagong',75684);
+
+Insert into Manager1 values('Shithi',031,01576586847,011,021);
+Insert into Manager1 values('Shithi',032,01776586847,012,022);
+Insert into Manager1 values('Shithi',033,01676586847,013,023);
+Insert into Manager1 values('Shithi',034,01976586847,014,024);
+Insert into Manager1 values('Shithi',035,01576586898,015,025);
+
+Insert into Manager2 values(021,'Motijheeel_Dhaka','Dhaka',97850);
+Insert into Manager2 values(022,'Uttara_Dhaka','Dhaka',897694);
+Insert into Manager2 values(023,'Mohakhali_Dhaka','Dhaka',86748);
+Insert into Manager2 values(024,'Gulshan_Dhaka','Dhaka',908640);
+Insert into Manager2 values(025,'Chittagong','Chittagong',97850);
+
+Insert into Cashier2 values(041,'Uttara_Dhaka','Dhaka',888757);
+Insert into Cashier2 values(042,'Mohakhali_Dhaka','Dhaka',87744);
+Insert into Cashier2 values(043,'Mohtjheel_Dhaka','Dhaka',424442);
+Insert into Cashier2 values(044,'Narayangonj','Narayangnj',756757);
+Insert into Cashier2 values(045,'Chittagong','Chittagong',12345);
+
+Insert into Cashier1 values(051,'Salar',01765353456,011,041);
+Insert into Cashier1 values(052,'Shithi',01765353456,012,042);
+Insert into Cashier1 values(053,'Sumaiya',01765353456,013,043);
+Insert into Cashier1 values(054,'Emamuzaman',01765353456,014,044);
+Insert into Cashier1 values(055,'Hassan',01765353456,015,045);
+
+Insert into Bill2 values(150,'French fry','1',061);
+Insert into Bill2 values(400,'Burger','2',062);
+Insert into Bill2 values(360,'Hot Coffee','3',063);
+Insert into Bill2 values(280,'Black Coffee','4',064);
+Insert into Bill2 values(200,'Cold Coffee','2',065);
+
+Insert into Bill1 values(10,80,to_date('1990-12-12', 'yyyy-mm-dd'),051,061);
+Insert into Bill1 values(11,80,to_date('2021-12-12', 'yyyy-mm-dd'),052,062);
+Insert into Bill1 values(12,100,to_date('2022-12-24', 'yyyy-mm-dd'),053,063);
+Insert into Bill1 values(13,80,to_date('2022-12-12', 'yyyy-mm-dd'),054,064);
+Insert into Bill1 values(14,80,to_date('2022-12-13', 'yyyy-mm-dd'),055,065);
+
+Insert into Customer2 values(071,'Uttara_Dhaka','Dhaka',986749);
+Insert into Customer2 values(072,'Mohakhali_Dhaka','Dhaka',87696);
+Insert into Customer2 values(073,'Mohtjheel_Dhaka','Dhaka',687898);
+Insert into Customer2 values(074,'Gulshan_Dhaka','Dhaka',766776);
+Insert into Customer2 values(075,'Chittagong','Chittagong',47648);
+
+Insert into Customer1 values(081,'Jakia',01675686784,071);
+Insert into Customer1 values(082,'Keya',01775686784,072);
+Insert into Customer1 values(083,'Safa',01575686784,073);
+Insert into Customer1 values(084,'Partho',01975686784,074);
+Insert into Customer1 values(085,'Suchanda',01675685676,075);
+
+Insert into Bill3 values(10,80,to_date('1990-12-12', 'yyyy-mm-dd'),081,061);
+Insert into Bill3 values(11,80,to_date('2021-12-12', 'yyyy-mm-dd'),082,062);
+Insert into Bill3 values(12,100,to_date('2022-12-24', 'yyyy-mm-dd'),083,063);
+Insert into Bill3 values(13,80,to_date('2022-12-12', 'yyyy-mm-dd'),084,064);
+Insert into Bill3 values(14,80,to_date('2022-12-13', 'yyyy-mm-dd'),085,065);
+
+Insert into Order1 values(10,'French fry',to_date('1990-12-12', 'yyyy-mm-dd'),1,081);
+Insert into Order1 values(11,'Burger',to_date('2021-12-12', 'yyyy-mm-dd'),2,082);
+Insert into Order1 values(12,'Hot Coffee',to_date('2022-12-24', 'yyyy-mm-dd'),3,083);
+Insert into Order1 values(13,'Black Coffee',to_date('2022-12-12', 'yyyy-mm-dd'),4,084);
+Insert into Order1 values(14,'Cold Coffee',to_date('2022-12-13', 'yyyy-mm-dd'),2,085);
+
+
+
+
+
+
+
