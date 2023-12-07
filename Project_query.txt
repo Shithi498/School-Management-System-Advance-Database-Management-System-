@@ -1,0 +1,251 @@
+3 single-row function
+
+SELECT	mgr_name, mgr_id, shop_id
+from Manager1
+where shop_id=13;       
+
+SELECT BILL_NUM,TIP_AMOUNT,TIP_AMOUNT+20
+FROM	bill1
+WHERE BILL_NUM=10;
+
+SELECT ITEM_NAME,ITEM_PRICE,TOTAL, TOTAL*ITEM_PRICE
+FROM	bill2
+WHERE ITEM_NAME	='Burger';
+
+-3 group function
+
+SELECT	 MAX(ITEM_PRICE)
+  		
+  	FROM	Bill2;
+
+SELECT	 Sum(ITEM_PRICE)
+  		
+  	FROM	Bill2;
+
+SELECT	avg(ITEM_PRICE),total
+ FROM	Bill2
+group by TOTAL;
+
+
+
+
+-3 joining
+
+
+SELECT Bill1.TIP_AMOUNT,Bill2.ITEM_PRICE
+FROM	Bill1, Bill2
+WHERE  Bill1.B_ID = Bill2.B_ID;
+
+
+SELECT  Bill2.ITEM_PRICE,Bill1.B_ID
+FROM	Bill1 , Bill2
+ WHERE Bill2.ITEM_PRICE
+ BETWEEN 100 AND 300;
+
+SELECT CUSTOMER1.C_NAME||' ORDERED '||ORDER1.ITEM_NAME
+FROM	ORDER1,CUSTOMER1 
+WHERE  ORDER1.C_ID= CUSTOMER1.C_ID;
+
+
+3 view
+
+CREATE VIEW 	MANAGERVU10
+ AS SELECT MGR_ID,MGR_PHONE_NUM
+ FROM MANAGER1
+  WHERE	M_ID=23;
+
+SELECT *
+FROM MANAGERVU10;
+
+CREATE VIEW MANAGERVU101
+ AS SELECT MGR_ID MANAGER_ID,MGR_PHONE_NUM MANAGER_PHONE_NUMBER
+ FROM MANAGER1
+  WHERE	M_ID=23;
+
+select *
+from MANAGERVU101;
+
+
+
+-3 synonym
+
+
+CREATE SEQUENCE sequence01
+  	INCREMENT BY 1
+  	START WITH 10
+ 	MAXVALUE 100
+ 	NOCACHE
+  	NOCYCLE;
+
+ALTER SEQUENCE sequence01
+  INCREMENT BY 1
+  MAXVALUE 50
+  NOCACHE
+  NOCYCLE;
+
+CREATE SYNONYM	mgr01
+ FOR Manager1;
+
+CREATE SYNONYM	chs01
+ FOR Cashier1;
+
+
+3 subquery
+
+select c_name
+from Customer1
+where c_id > (select c_id
+              from Customer1
+              where k_id=72);
+
+
+SELECT  BILL_NUM , TIP_AMOUNT 
+FROM     bill1
+WHERE  BILL_NUM  = (SELECT  BILL_NUM     	
+                 FROM bill1    	
+                 WHERE E_ID=53)
+   AND     e_id < 
+  		(SELECT e_id
+  		FROM	bill1
+  		WHERE	b_id = 64);
+ 
+
+SELECT	ITEM_NAME,TOTAL,ITEM_PRICE
+   FROM	bill2
+ WHERE	ITEM_PRICE = (SELECT MIN(ITEM_PRICE)
+  		     FROM bill2);
+
+PL/SQL
+
+3 function
+
+CREATE FUNCTION total_num_of_order
+RETURN number AS 
+   total number(4) := 0; 
+BEGIN 
+   SELECT count(*) into total 
+   FROM bill2;  
+   RETURN total; 
+END; 
+
+
+DECLARE 
+   o number(4); 
+BEGIN 
+   o := total_num_of_order(); 
+   dbms_output.put_line('Total order: ' || o); 
+END; 
+
+
+
+CREATE FUNCTION totalCustomer01
+RETURN number AS 
+   total number(2) := 0; 
+BEGIN 
+   SELECT count(*) into total 
+   FROM customer1;  
+   RETURN total; 
+END;
+
+
+3 record
+
+declare
+Cashier Cashier1%rowtype;
+begin
+select * into Cashier from Cashier1
+where e_name='Shithi';
+dbms_output.put_line(Cashier.E_ID ||' '||Cashier.PHONE_NUM);
+end
+
+
+declare 
+cursor c_Customer is 
+select * from Customer1 where C_NAME='Jakia';
+rec_Customer Customer1%rowtype;
+begin 
+open c_Customer;
+fetch c_Customer into rec_Customer;
+dbms_output.put_line(rec_Customer.c_id||' '||rec_Customer.PHONE_NUM);
+close c_Customer;
+end;
+
+
+declare 
+cursor c_bill is 
+select * from bill2 where ITEM_NAME='Cold Coffee';
+rec_bill bill2%rowtype;
+begin 
+open c_bill;
+fetch c_bill into rec_bill;
+dbms_output.put_line(rec_bill.ITEM_PRICE||' '||rec_bill.TOTAL);
+close c_bill;
+end;
+
+
+
+
+Cursor
+
+#Cursor query
+
+SELECT * FROM customer1
+
+1#
+DECLARE 
+  cur sys_refcursor;
+  cur_rec customer1%rowtype;
+BEGIN
+  OPEN cur FOR
+  SELECT * FROM customer1;
+
+  dbms_output.put_line(cur%rowcount);--returning 0
+
+  LOOP
+    FETCH cur INTO cur_rec;  
+    EXIT WHEN cur%notfound;
+    dbms_output.put_line(cur%rowcount);--will return row number beginning with 1
+    dbms_output.put_line(cur_rec.C_ID);
+  END LOOP;
+
+  dbms_output.put_line('Total Rows: ' || cur%rowcount);--here you will get total row count
+END;
+
+2#
+DECLARE 
+  cur sys_refcursor;
+  cur_rec customer2%rowtype;
+BEGIN
+  OPEN cur FOR
+  SELECT * FROM customer2;
+
+  dbms_output.put_line(cur%rowcount);--returning 0
+
+  LOOP
+    FETCH cur INTO cur_rec;  
+    EXIT WHEN cur%notfound;
+    dbms_output.put_line(cur%rowcount);--will return row number beginning with 1
+    dbms_output.put_line(cur_rec.K_ID);
+  END LOOP;
+
+  dbms_output.put_line('Total Rows: ' || cur%rowcount);--here you will get total row count
+END;
+
+3#
+declare
+  cursor c2 is select * from customer1;
+  var c2%rowtype;
+  i number := 0;
+begin
+  open c2;
+  loop
+    fetch c2 into var;
+    exit when c2%NOTFOUND;
+    i := i+1;
+  end loop;
+  close c2;
+dbms_output.put_line('total records in cursor'||i);
+end;
+
+
+
